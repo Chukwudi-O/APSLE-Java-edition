@@ -8,7 +8,7 @@ HOW TO SETUP:
 2. Once downloaded and installed you will need to import the apsle database into phpmydmin so that the software may reference it.
 3. To do this, first open your XAMPP control panel and click start for both Apache and MySQL, then type 'localhost/phpmyadmin' in your browser's search bar (Google Chrome recommended)
 4. Once you are redirected there will be an import option at the top of the page, click it and it will ask for a file. upload the file named 'apsle.sql' provided and your database will be created and populated with tables.
-5. You can now use the software through the Eclipse IDE. Navigate to the folder where you have the project downloaded and run the Main class to test the software.
+5. You can now compile the software with whichever IDE you choose as the source code is provided. Run the software and test it.
 6. Passwords for login are provided below.
 
 
