@@ -20,18 +20,28 @@ Username - chuck | PASSWORD - ojuro
 TEACHER LOGIN:
 
 Username - chuck | PASSWORD - tyler          (Teaches grade 1 class 1)
+
 Username - chevil | PASSWORD - mitchell      (Teaches grade 2 class 1)
+
 Username - tatanya | PASSWORD - lynch        (Teaches grade 3 class 1)
+
 Username - noel | PASSWORD - powelle         (Teaches grade 4 class 1)
+
 Username - shamar | PASSWORD - nelson        (Teaches grade 5 class 1)
+
 Username - teacher61 | PASSWORD - teacher61  (Teaches grade 6 class 1)
 
 
 STUDENT LOGIN:
 
 Username - student11 | PASSWORD - student11  (Is taught in grade 1 class 1)
+
 Username - student21 | PASSWORD - student21  (Is taught in grade 2 class 1)
+
 Username - student31 | PASSWORD - student31  (Is taught in grade 3 class 1)
+
 Username - student41 | PASSWORD - student41  (Is taught in grade 4 class 1)
+
 Username - student51 | PASSWORD - student51  (Is taught in grade 5 class 1)
+
 Username - student61 | PASSWORD - student61  (Is taught in grade 6 class 1)
