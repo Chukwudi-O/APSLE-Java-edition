@@ -1,6 +1,7 @@
 # APSLE-Java-edition
 Anchovy Primary School Learning Environment is a java based platform that provides students and teachers a platform for sharing learning material and assignments for better engagement with students.
 
+NOTE: Ensure that the 'mysql-connector-java-8.0.23.jar' file is in your project folder before running anything or else the software will not hurt.
 
 HOW TO SETUP:
 1. To use this software locally, you will need another software called XAMPP Control panel which you can download off of their official website.
