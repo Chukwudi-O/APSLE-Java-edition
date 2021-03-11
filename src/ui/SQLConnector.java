@@ -1,5 +1,6 @@
 package ui;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class SQLConnector {
 	private String url = "jdbc:mysql://localhost:3306";
@@ -71,7 +72,8 @@ public class SQLConnector {
 		return classroom;
 	}
 
-	public void addNewUser(String[] newUserInfo) {
+	public void addNewUser(String[] newUserInfo) 
+	{
 		try
 		{
 			if (newUserInfo[2].equals("teacher"))
@@ -98,6 +100,67 @@ public class SQLConnector {
 				System.out.println("Student added successfully");
 			}
 		} catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
+	public String[][] getUserData()
+	{
+		ArrayList<String[]> data = new ArrayList<String[]>();
+		String[][] none = {};
+		try
+		{
+			PreparedStatement stmt_t = conn.prepareStatement("SELECT * FROM teacherlogins");
+			PreparedStatement stmt_s = conn.prepareStatement("SELECT * FROM studentlogins");
+			
+			ResultSet res_t = stmt_t.executeQuery();
+			ResultSet res_s = stmt_s.executeQuery();
+			
+			
+			int i=0;
+			while(res_t.next())
+			{
+				String[] tempData = {res_t.getString("username"),"Teacher",String.valueOf(res_t.getInt("gradeNumber")),String.valueOf(res_t.getInt("classNumber"))};
+				data.add(tempData);
+				++i;
+			}
+			
+			while(res_s.next())
+			{
+				String[] tempData = {res_s.getString("username"),"Student",String.valueOf(res_s.getInt("gradeNumber")),String.valueOf(res_s.getInt("classNumber"))};
+				data.add(tempData);
+				++i;
+			}
+			
+			String[][] allData = new String[data.size()][4];
+			
+			for (i=0;i<data.size();++i)
+			{
+				allData[i][0] = data.get(i)[0];
+				allData[i][1] = data.get(i)[1];
+				allData[i][2] = data.get(i)[2];
+				allData[i][3] = data.get(i)[3];
+			}
+			
+			return allData;
+			
+			
+		} catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return none;
+	}
+
+	public void DeleteUser(String[] userToDelete) {
+		try
+		{
+			PreparedStatement stmt = conn.prepareStatement("DELETE FROM "+userToDelete[1].toLowerCase()+"logins WHERE username = ?");
+			stmt.setString(1, userToDelete[0]);
+			stmt.execute();
+			System.out.println(userToDelete[0]+" was deleted successfully.");
+		} catch(Exception e)
 		{
 			e.printStackTrace();
 		}

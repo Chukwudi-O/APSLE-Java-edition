@@ -71,6 +71,7 @@ public class TheListener implements ActionListener {
 		{
 			uimanager.exitApp();
 		}else if (e.getActionCommand().equals("ADD"))
+		{
 			if(!uimanager.isTextFieldEmpty())
 			{
 				String[] newUserInfo = uimanager.getNewUserInfo();
@@ -81,6 +82,7 @@ public class TheListener implements ActionListener {
 						if (Integer.parseInt(newUserInfo[3]) < 7 && Integer.parseInt(newUserInfo[4]) < 7)
 						{
 							sql.addNewUser(newUserInfo);
+							uimanager.resetManageUsers();
 						}
 					} catch (Exception ex)
 					{
@@ -89,7 +91,18 @@ public class TheListener implements ActionListener {
 					
 				}
 			}
-		
+		}else if (e.getActionCommand().equals("DELETE"))
+		{
+			String [] userToDelete = uimanager.getUserToDelete();
+			if(userToDelete.length != 0)
+			{
+				sql.DeleteUser(userToDelete);
+				uimanager.resetManageUsers();
+			} else
+			{
+				System.out.println("That user does not exist");
+			}
+		}
 	} 
 
 }

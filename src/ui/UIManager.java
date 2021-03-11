@@ -8,18 +8,20 @@ public class UIManager {
 	
 	private JFrame mainFrame;
 	private JFrame homeFrame;
+	private JFrame manageUsers;
 	private SQLConnector sql;
 	private JTextField user_tf,pass_tf;
 	private JButton login_b;
 	private TheListener listener;
 	private AddUser addUser_p;
+	private DeleteUser deleteUser_p;
+	private User currentUser;
 	 
 	
 	public UIManager()
 	{
 		sql = new SQLConnector();
 		listener = new TheListener(this,sql);
-		addUser_p = new AddUser(listener);
 	}
 	
 	
@@ -104,6 +106,7 @@ public class UIManager {
 	public void loadHomePage(User currUser)
 	{
 		//mainFrame.dispatchEvent(new WindowEvent(mainFrame,WindowEvent.WINDOW_CLOSING));
+		currentUser = currUser;
 		mainFrame.setVisible(false);
 		homeFrame = new JFrame("APSLE - "+currUser.getType()+" Home");
 		homeFrame.setPreferredSize(new Dimension(500,500));
@@ -161,14 +164,25 @@ public class UIManager {
 	
 	public void loadManageUsers(User currUser)
 	{
-		JFrame manageUsers = new JFrame("APSLE - Manage Users");
 		manageUsers = new JFrame("APSLE - Manage Users");
+		JPanel panel = new JPanel();
+		addUser_p = new AddUser(listener);
+		deleteUser_p = new DeleteUser(listener,sql);
+		
+		panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
+		panel.add(Box.createRigidArea(new Dimension(0,20)));
+		panel.add(addUser_p);
+		panel.add(Box.createRigidArea(new Dimension(0,20)));
+		panel.add(deleteUser_p);
+		panel.add(Box.createRigidArea(new Dimension(0,20)));
+		
 		manageUsers.setPreferredSize(new Dimension(600,600));
-        manageUsers.setResizable(false);
-        manageUsers.setLocation(500, 100);        
-        manageUsers.getContentPane().add(addUser_p);
+        //manageUsers.setResizable(false);
+        manageUsers.setLocation(500, 100);   
+        manageUsers.getContentPane().add(panel);
         manageUsers.pack();
         manageUsers.setVisible(true);
+        
 	}
 	
 	public String getUserName()
@@ -194,5 +208,18 @@ public class UIManager {
 	public String[] getNewUserInfo()
 	{
 		return addUser_p.getNewUserInfo();
+	}
+
+
+	public String[] getUserToDelete() {
+		
+		return deleteUser_p.getUserData();
+	}
+
+
+	public void resetManageUsers() {
+		
+		manageUsers.dispatchEvent(new WindowEvent(manageUsers,WindowEvent.WINDOW_CLOSING));
+		loadManageUsers(currentUser);
 	}
 }
