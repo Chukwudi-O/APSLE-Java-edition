@@ -36,7 +36,7 @@ public class AddUser extends JPanel {
     public AddUser(TheListener listener)
     {
     	this.setLayout(new BoxLayout(this,BoxLayout.PAGE_AXIS));
-        this.add(Box.createRigidArea(new Dimension(0,50)));
+    	this.setPreferredSize(new Dimension(600, 275));
         
     	type_bg.add(teacher_rb);
         type_bg.add(student_rb);
@@ -44,7 +44,7 @@ public class AddUser extends JPanel {
         add_b.addActionListener(listener);
          
         this.add(title_l);
-        this.add(Box.createRigidArea(new Dimension(0,50)));
+        this.add(Box.createRigidArea(new Dimension(0,20)));
         this.add(addUser_l);
         
         JPanel row1_p = new JPanel();
@@ -54,7 +54,7 @@ public class AddUser extends JPanel {
         row1_p.add(Box.createRigidArea(new Dimension(50,0)));
         row1_p.add(password_l);
         row1_p.add(Box.createRigidArea(new Dimension(50,0)));
-        this.add(Box.createRigidArea(new Dimension(0,50)));
+        this.add(Box.createRigidArea(new Dimension(0,20)));
         this.add(row1_p);
         
         JPanel row2_p = new JPanel();
@@ -64,7 +64,7 @@ public class AddUser extends JPanel {
         row2_p.add(Box.createRigidArea(new Dimension(50,0)));
         row2_p.add(password_tf);
         row2_p.add(Box.createRigidArea(new Dimension(50,0)));
-        this.add(Box.createRigidArea(new Dimension(0,50)));
+        this.add(Box.createRigidArea(new Dimension(0,20)));
         this.add(row2_p);
         
         JPanel row3_p = new JPanel();
@@ -74,7 +74,7 @@ public class AddUser extends JPanel {
         row3_p.add(Box.createRigidArea(new Dimension(50,0)));
         row3_p.add(student_rb);
         row3_p.add(Box.createRigidArea(new Dimension(50,0)));
-        this.add(Box.createRigidArea(new Dimension(0,50)));
+        this.add(Box.createRigidArea(new Dimension(0,20)));
         this.add(row3_p);
         
         JPanel row4_p = new JPanel();
@@ -84,7 +84,7 @@ public class AddUser extends JPanel {
         row4_p.add(Box.createRigidArea(new Dimension(50,0)));
         row4_p.add(classNum_l);
         row4_p.add(Box.createRigidArea(new Dimension(50,0)));
-        this.add(Box.createRigidArea(new Dimension(0,50)));
+        this.add(Box.createRigidArea(new Dimension(0,20)));
         this.add(row4_p);
         
         JPanel row5_p = new JPanel();
@@ -94,12 +94,12 @@ public class AddUser extends JPanel {
         row5_p.add(Box.createRigidArea(new Dimension(50,0)));
         row5_p.add(classNum_tf);
         row5_p.add(Box.createRigidArea(new Dimension(50,0)));
-        this.add(Box.createRigidArea(new Dimension(0,50)));
+        this.add(Box.createRigidArea(new Dimension(0,20)));
         this.add(row5_p);
         
-        this.add(Box.createRigidArea(new Dimension(0,50)));
+        this.add(Box.createRigidArea(new Dimension(0,20)));
         this.add(add_b);
-        this.add(Box.createRigidArea(new Dimension(0,50)));
+        this.add(Box.createRigidArea(new Dimension(0,20)));
     }
     
     

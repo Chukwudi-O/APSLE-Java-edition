@@ -3,6 +3,7 @@ package ui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class TheListener implements ActionListener {
 
 	User currentUser;
@@ -16,11 +17,11 @@ public class TheListener implements ActionListener {
 	}
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getActionCommand().equals("LOGIN"))
+		switch(e.getActionCommand())
 		{
+		case "LOGIN":
 			String user = uimanager.getUserName();
 			String pass = uimanager.getPassWord();
-			String userType = "nonUser";
 			if (user.equals("") || pass.equals(""))
 			{
 				System.out.println("Login unsucessful");
@@ -28,49 +29,38 @@ public class TheListener implements ActionListener {
 			{
 				if(uimanager.verifyCredentials(user,pass).equals("admin"))
 				{
-					userType = "admin";
+					currentUser = new Administrator(user,pass);
+					uimanager.loadHomePage(currentUser);
 				}else if(uimanager.verifyCredentials(user,pass).equals("teacher"))
 				{
-					userType = "teacher";
+					int[] classroom = sql.getClassroomNumbers(user, pass, "teacher");
+					currentUser = new Teacher(user,pass,classroom[0],classroom[1]);
+					uimanager.loadHomePage(currentUser);
 				}else if(uimanager.verifyCredentials(user,pass).equals("student"))
 				{
-					userType = "student";
+					int[] classroom = sql.getClassroomNumbers(user, pass, "student");
+					currentUser = new Student(user,pass,classroom[0],classroom[1]);
+					uimanager.loadHomePage(currentUser);
 				}else if(uimanager.verifyCredentials(user,pass).equals("nonUser"))
 				{
 					System.out.println("Unsuccessful login. Check your credentials again.");
 				}	
 			}
+			break;
 			
-			if(!userType.equals("nonUser"))
-			{
-				
-				if (userType.equals("admin"))
-				{
-					currentUser = new Administrator(user,pass);
-					
-				}else
-				{
-					int[] classroom = sql.getClassroomNumbers(user, pass, userType);
-					if (userType.equals("teacher")) {
-						currentUser = new Teacher(user,pass,classroom[0],classroom[1]);
-					} else
-					{
-						currentUser = new Student(user,pass,classroom[0],classroom[1]);
-					}
-				}
-				uimanager.loadHomePage(currentUser);
-			}
-		}else if (e.getActionCommand().equals("MANAGE USERS"))
-		{
-			System.out.println("Managing users");
+		case "MANAGE USERS":
 			uimanager.loadManageUsers(currentUser);
-		}else if (e.getActionCommand().equals("MANAGE CLASSROOMS"))
-		{
-			System.out.println("Managing classrooms");
-		}else if (e.getActionCommand().equals("EXIT"))
-		{
+			break;
+			
+		case "MANAGE CLASSROOMS":
+			uimanager.loadManageClassrooms();
+			break;
+			
+		case "EXIT":
 			uimanager.exitApp();
-		}else if (e.getActionCommand().equals("ADD"))
+			break;
+			
+		case "ADD":
 			if(!uimanager.isTextFieldEmpty())
 			{
 				String[] newUserInfo = uimanager.getNewUserInfo();
@@ -81,6 +71,7 @@ public class TheListener implements ActionListener {
 						if (Integer.parseInt(newUserInfo[3]) < 7 && Integer.parseInt(newUserInfo[4]) < 7)
 						{
 							sql.addNewUser(newUserInfo);
+							uimanager.resetFrame("ManageUsers");
 						}
 					} catch (Exception ex)
 					{
@@ -89,7 +80,48 @@ public class TheListener implements ActionListener {
 					
 				}
 			}
-		
-	} 
+			break;
+			
+		case "DELETE":
+			String [] userToDelete = uimanager.getUserToDelete();
+			if(userToDelete.length != 0)
+			{
+				sql.DeleteUser(userToDelete);
+				uimanager.resetFrame("ManageUsers");
+			} else
+			{
+				System.out.println("That user does not exist");
+			}
+			break;
+			
+		case "UPDATE":
+			uimanager.updateUsers();
+			break;
+		case "MATH":
+			uimanager.loadSubject("math");
+			break;
+		case "ENGLISH":
+			uimanager.loadSubject("english");
+			break;
+		case "SCIENCE":
+			uimanager.loadSubject("science");
+			break;
+		case "UPLOAD MATERIALS":
+			uimanager.searchFile("material");
+			break;
+		case "UPLOAD ASSIGNMENTS":
+			uimanager.searchFile("assignment");
+			break;
+		case "ApproveSelection":
+			uimanager.uploadFile();
+			break;
+		case "CancelSelection":
+			uimanager.cancelUpload();
+			break;
+		default:
+				System.out.println(e.getActionCommand());
+		}
+	}
+	
 
 }
