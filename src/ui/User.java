@@ -23,4 +23,14 @@ public class User {
 	{
 		return "user";
 	}
+	
+	public int getGradeNum()
+	{
+		return 0;
+	}
+	
+	public int getClassNum()
+	{
+		return 0;
+	}
 }

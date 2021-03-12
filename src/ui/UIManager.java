@@ -7,15 +7,15 @@ import java.awt.event.*;
 public class UIManager {
 	
 	private JFrame mainFrame;
-	private JFrame homeFrame;
-	private JFrame manageUsers;
+	private HomeFrame homeFrame;
 	private SQLConnector sql;
 	private JTextField user_tf,pass_tf;
 	private JButton login_b;
 	private TheListener listener;
-	private AddUser addUser_p;
-	private DeleteUser deleteUser_p;
+	private ManageClassroom manageClassroom;
+	private ManageUsers manageUsers;
 	private User currentUser;
+	private Subject selectedSubject;
 	 
 	
 	public UIManager()
@@ -105,84 +105,15 @@ public class UIManager {
 	
 	public void loadHomePage(User currUser)
 	{
-		//mainFrame.dispatchEvent(new WindowEvent(mainFrame,WindowEvent.WINDOW_CLOSING));
-		currentUser = currUser;
 		mainFrame.setVisible(false);
-		homeFrame = new JFrame("APSLE - "+currUser.getType()+" Home");
-		homeFrame.setPreferredSize(new Dimension(500,500));
-        homeFrame.setResizable(false);
-        homeFrame.setLocation(500, 250);
-        homeFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        
-        if(currUser.getType().equals("ADMIN"))
-        {
-        	
-        	JLabel title_l = new JLabel("APSLE ADMIN HOME");
-        	JLabel welcome_l = new JLabel("Welcome "+currUser.getUsername()+", what would you like to do today?");
-        	JButton manageUsers_b = new JButton("MANAGE USERS");
-        	JButton manageClassrooms_b = new JButton("MANAGE CLASSROOMS");
-        	JButton logout_b = new JButton("EXIT");
-        	
-        	manageUsers_b.addActionListener(listener);
-        	manageClassrooms_b.addActionListener(listener);
-        	logout_b.addActionListener(listener);
-        	
-        	
-        	JPanel homePanel = new JPanel();
-        	homePanel.setLayout(new BoxLayout(homePanel,BoxLayout.PAGE_AXIS));
-        	homePanel.add(Box.createRigidArea(new Dimension(0,50)));
-        	homePanel.add(title_l);
-        	homePanel.add(Box.createRigidArea(new Dimension(0,50)));
-        	homePanel.add(welcome_l);
-        	homePanel.add(Box.createRigidArea(new Dimension(0,50)));
-        	homePanel.add(manageUsers_b);
-        	homePanel.add(Box.createRigidArea(new Dimension(0,50)));
-        	homePanel.add(manageClassrooms_b);
-        	homePanel.add(Box.createRigidArea(new Dimension(0,50)));
-        	homePanel.add(logout_b);
-        	homePanel.add(Box.createRigidArea(new Dimension(0,50)));
-        	
-        	JPanel outerPanel = new JPanel();
-        	outerPanel.setLayout(new BoxLayout(outerPanel,BoxLayout.LINE_AXIS));
-        	outerPanel.add(Box.createRigidArea(new Dimension(100,0)));
-        	outerPanel.add(homePanel);
-        	outerPanel.add(Box.createRigidArea(new Dimension(100,0)));
-        	
-        	homeFrame.getContentPane().add(outerPanel);
-        	
-        } else if (currUser.getType().equals("TEACHER"))
-        {
-        	System.out.println("Teacher Login successful");
-        }else
-        {
-        	System.out.println("Student Login successful");
-        }
-        
-        homeFrame.pack();
-        homeFrame.setVisible(true);
+		homeFrame = new HomeFrame(currUser,listener);
+		currentUser = currUser;
 	}
+	
 	
 	public void loadManageUsers(User currUser)
 	{
-		manageUsers = new JFrame("APSLE - Manage Users");
-		JPanel panel = new JPanel();
-		addUser_p = new AddUser(listener);
-		deleteUser_p = new DeleteUser(listener,sql);
-		
-		panel.setLayout(new BoxLayout(panel,BoxLayout.PAGE_AXIS));
-		panel.add(Box.createRigidArea(new Dimension(0,20)));
-		panel.add(addUser_p);
-		panel.add(Box.createRigidArea(new Dimension(0,20)));
-		panel.add(deleteUser_p);
-		panel.add(Box.createRigidArea(new Dimension(0,20)));
-		
-		manageUsers.setPreferredSize(new Dimension(600,600));
-        //manageUsers.setResizable(false);
-        manageUsers.setLocation(500, 100);   
-        manageUsers.getContentPane().add(panel);
-        manageUsers.pack();
-        manageUsers.setVisible(true);
-        
+		manageUsers = new ManageUsers(listener,sql);
 	}
 	
 	public String getUserName()
@@ -202,24 +133,71 @@ public class UIManager {
 	
 	public boolean isTextFieldEmpty()
 	{
-		return !addUser_p.checkTextFields();
+		return !manageUsers.checkTextFields();
 	}
 
 	public String[] getNewUserInfo()
 	{
-		return addUser_p.getNewUserInfo();
+		return manageUsers.getNewUserInfo();
 	}
 
 
 	public String[] getUserToDelete() {
 		
-		return deleteUser_p.getUserData();
+		return manageUsers.getUserData();
 	}
 
 
-	public void resetManageUsers() {
+	public void loadManageClassrooms() {
+		manageClassroom = new ManageClassroom(listener,sql);
+	}
+
+
+	public void updateUsers() {
+		int selection = manageClassroom.thereIsSelection();
+		if(selection != 0)
+		{
+			String[][] updateInfo = manageClassroom.getUpdateInfo(selection);
+			sql.updateUserInfo(updateInfo);
+			resetFrame("ManageClassrooms");
+		}
 		
-		manageUsers.dispatchEvent(new WindowEvent(manageUsers,WindowEvent.WINDOW_CLOSING));
-		loadManageUsers(currentUser);
+	}
+	
+	public void resetFrame(String frameType)
+	{
+		switch (frameType)
+		{
+		case "ManageUsers":
+			manageUsers.dispatchEvent(new WindowEvent(manageUsers,WindowEvent.WINDOW_CLOSING));
+			loadManageUsers(currentUser);
+			break;
+		case "ManageClassrooms":
+			manageUsers.dispatchEvent(new WindowEvent(manageUsers,WindowEvent.WINDOW_CLOSING));
+			loadManageUsers(currentUser);
+			break;
+		}
+	}
+
+
+	public void loadSubject(String subj) {
+		selectedSubject = new Subject(listener,sql,subj,currentUser);
+	}
+
+
+	public void searchFile(String type) {
+		selectedSubject.promptFile(type);
+	}
+
+
+	public void uploadFile() {
+		selectedSubject.uploadFile();
+		selectedSubject.dispatchEvent(new WindowEvent(selectedSubject,WindowEvent.WINDOW_CLOSING));
+		
+	}
+
+
+	public void cancelUpload() {
+		selectedSubject.cancelUpload();
 	}
 }
