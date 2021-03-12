@@ -33,7 +33,10 @@ CREATE TABLE `teacheruploads`(
 `id` BIGINT NOT NULL AUTO_INCREMENT,
 `fileName` varchar(64) DEFAULT NULL,
 `fileExtension` varchar(64) DEFAULT NULL,
-`dateUploaded` int(64) DEFAULT NULL,
+`dateUploaded` varchar(64) DEFAULT NULL,
+`subject` varchar(64) DEFAULT NULL,
+`gradeNumber` int(64) DEFAULT NULL,
+`classNumber` int(64) DEFAULT NULL,
 `typeOfUpload` varchar(64) DEFAULT NULL,
 `uploadedBy` varchar(64) DEFAULT NULL,
 PRIMARY KEY(`id`)
@@ -45,7 +48,7 @@ INSERT INTO `adminlogins` (`id`, `username`, `password`) VALUES
 
 /* Inserting values into teacherlogins table */
 INSERT INTO `teacherlogins` (`id`, `username`, `password`,`classNumber`, `gradeNumber`) VALUES
-(1, 'chuck', 'ojuro',1,1);
+(1, 'chuck', 'tyler',1,1);
 INSERT INTO `teacherlogins` (`id`, `username`, `password`,`classNumber`, `gradeNumber`) VALUES
 (2, 'chevil', 'mitchell',1,2);
 INSERT INTO `teacherlogins` (`id`, `username`, `password`,`classNumber`, `gradeNumber`) VALUES
